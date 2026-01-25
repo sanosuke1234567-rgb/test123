@@ -21,3 +21,13 @@ python app.py
 ```bash
 pip install -r requirements.txt
 ```
+
+## 预览（无需依赖）
+
+如果当前环境无法安装依赖，可直接使用静态预览页：
+
+```bash
+python -m http.server 8000
+```
+
+然后访问 `http://localhost:8000/preview.html` 查看效果。

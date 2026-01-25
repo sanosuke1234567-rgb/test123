@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>每日食谱营养记录 - 预览</title>
+    <link rel="stylesheet" href="static/styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header>
+        <h1>每日食谱营养记录</h1>
+        <p class="subtitle">预览页面（静态示例数据）</p>
+      </header>
+
+      <section class="card">
+        <h2>新增食谱</h2>
+        <form id="recipe-form">
+          <div class="form-grid">
+            <label>
+              日期
+              <input type="date" value="2024-10-20" required />
+            </label>
+            <label>
+              食谱名称
+              <input type="text" value="低脂鸡胸餐" required />
+            </label>
+            <label>
+              几人份
+              <input type="number" min="1" value="2" required />
+            </label>
+          </div>
+
+          <div class="ingredients">
+            <div class="ingredients-header">
+              <h3>食材与重量</h3>
+              <button type="button" class="secondary" id="add-ingredient">添加一行</button>
+            </div>
+            <div id="ingredients-list"></div>
+          </div>
+
+          <div class="preview">
+            <h3>当前食谱营养预览（总量）</h3>
+            <div class="nutrition-grid" id="preview-totals">
+              <div>
+                <span>碳水</span>
+                <strong id="preview-carbs">0 g</strong>
+              </div>
+              <div>
+                <span>蛋白</span>
+                <strong id="preview-protein">0 g</strong>
+              </div>
+              <div>
+                <span>脂肪</span>
+                <strong id="preview-fat">0 g</strong>
+              </div>
+              <div>
+                <span>卡路里</span>
+                <strong id="preview-calories">0 kcal</strong>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="primary">保存食谱</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>当日总营养摄入</h2>
+        <div class="nutrition-grid">
+          <div>
+            <span>碳水</span>
+            <strong>95.2 g</strong>
+          </div>
+          <div>
+            <span>蛋白</span>
+            <strong>78.6 g</strong>
+          </div>
+          <div>
+            <span>脂肪</span>
+            <strong>22.4 g</strong>
+          </div>
+          <div>
+            <span>卡路里</span>
+            <strong>913 kcal</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>当日食谱</h2>
+        <div class="recipe-list">
+          <article class="recipe">
+            <header>
+              <div>
+                <h3>低脂鸡胸餐</h3>
+                <p>2 人份</p>
+              </div>
+              <div class="recipe-totals">
+                <span>总碳水 52.4 g</span>
+                <span>总蛋白 60.2 g</span>
+                <span>总脂肪 8.6 g</span>
+                <span>总卡路里 537 kcal</span>
+              </div>
+            </header>
+            <div class="recipe-body">
+              <div>
+                <h4>食材明细</h4>
+                <ul>
+                  <li>鸡胸肉 - 180 g <span class="muted">(碳水 0 g / 蛋白 55.8 g / 脂肪 6.5 g)</span></li>
+                  <li>西兰花 - 150 g <span class="muted">(碳水 9.9 g / 蛋白 4.2 g / 脂肪 0.6 g)</span></li>
+                  <li>白米饭 - 120 g <span class="muted">(碳水 34.3 g / 蛋白 3.1 g / 脂肪 0.4 g)</span></li>
+                </ul>
+              </div>
+              <div>
+                <h4>单人份摄入</h4>
+                <div class="nutrition-grid small">
+                  <div>
+                    <span>碳水</span>
+                    <strong>26.2 g</strong>
+                  </div>
+                  <div>
+                    <span>蛋白</span>
+                    <strong>30.1 g</strong>
+                  </div>
+                  <div>
+                    <span>脂肪</span>
+                    <strong>4.3 g</strong>
+                  </div>
+                  <div>
+                    <span>卡路里</span>
+                    <strong>268 kcal</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <template id="ingredient-template">
+      <div class="ingredient-row">
+        <label>
+          食材
+          <select name="ingredient_id" required>
+            <option value="1" data-carbs="28.6" data-protein="2.6" data-fat="0.3" data-calories="130.1">
+              白米饭 (每100g: C28.6 / P2.6 / F0.3)
+            </option>
+            <option value="2" data-carbs="0" data-protein="31.0" data-fat="3.6" data-calories="165.6">
+              鸡胸肉 (每100g: C0 / P31 / F3.6)
+            </option>
+            <option value="3" data-carbs="1.1" data-protein="13.0" data-fat="11.0" data-calories="155.1">
+              鸡蛋 (每100g: C1.1 / P13 / F11)
+            </option>
+            <option value="4" data-carbs="66.3" data-protein="16.9" data-fat="6.9" data-calories="380.1">
+              燕麦 (每100g: C66.3 / P16.9 / F6.9)
+            </option>
+            <option value="5" data-carbs="6.6" data-protein="2.8" data-fat="0.4" data-calories="38.8">
+              西兰花 (每100g: C6.6 / P2.8 / F0.4)
+            </option>
+          </select>
+        </label>
+        <label>
+          重量(g)
+          <input type="number" name="weight_g" min="1" value="150" required />
+        </label>
+        <div class="row-macros">
+          <span>碳水 <strong data-field="carbs">0</strong> g</span>
+          <span>蛋白 <strong data-field="protein">0</strong> g</span>
+          <span>脂肪 <strong data-field="fat">0</strong> g</span>
+          <span>卡路里 <strong data-field="calories">0</strong> kcal</span>
+        </div>
+        <button type="button" class="ghost remove-row">移除</button>
+      </div>
+    </template>
+
+    <script src="static/app.js"></script>
+  </body>
+</html>
