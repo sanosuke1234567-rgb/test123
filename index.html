@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>俄罗斯方块</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="game">
+        <header class="hud">
+          <div>
+            <h1>俄罗斯方块</h1>
+            <p class="subtitle">方向键移动 / 上旋转 / 下加速 / C 换形</p>
+          </div>
+          <div class="panel">
+            <div class="panel__label">下一个</div>
+            <canvas id="next" width="120" height="120" aria-label="下一个方块"></canvas>
+          </div>
+        </header>
+        <canvas id="board" width="300" height="600" aria-label="俄罗斯方块棋盘"></canvas>
+        <footer class="status">
+          <div>得分：<span id="score">0</span></div>
+          <div>消除：<span id="lines">0</span></div>
+        </footer>
+      </section>
+    </main>
+    <script src="main.js"></script>
+  </body>
+</html>
