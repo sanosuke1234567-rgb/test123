@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>运动计时器</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <h1>运动计时器</h1>
+      <p>设置动作、组数、组间/动作间休息与重量，完成每组后开始休息倒计时。</p>
+    </div>
+    <div class="session-actions">
+      <button id="startSession" class="primary">开始训练</button>
+      <button id="resetSession" class="ghost" disabled>重置</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="config-panel">
+      <div class="panel-header">
+        <h2>动作配置</h2>
+        <button id="addExercise" class="ghost">+ 添加动作</button>
+      </div>
+      <div id="exerciseList" class="exercise-list"></div>
+    </section>
+
+    <section class="timer-panel">
+      <div class="status-card">
+        <div class="status-header">
+          <div>
+            <p class="status-label">当前阶段</p>
+            <h2 id="phaseLabel">未开始</h2>
+          </div>
+          <div class="style-toggle">
+            <button class="style-btn active" data-style="numeric">数字</button>
+            <button class="style-btn" data-style="pointer">指针</button>
+            <button class="style-btn" data-style="ring">走条</button>
+          </div>
+        </div>
+        <div class="timer-display">
+          <div id="numericTimer" class="timer-face numeric active">
+            <span id="timeText">00:00</span>
+          </div>
+          <div id="pointerTimer" class="timer-face pointer">
+            <svg viewBox="0 0 240 240" aria-hidden="true">
+              <circle cx="120" cy="120" r="100" class="dial" />
+              <line x1="120" y1="120" x2="120" y2="30" class="hand" />
+              <circle cx="120" cy="120" r="6" class="center" />
+            </svg>
+            <span class="timer-caption" id="pointerLabel">00:00</span>
+          </div>
+          <div id="ringTimer" class="timer-face ring">
+            <svg viewBox="0 0 240 240" aria-hidden="true">
+              <circle cx="120" cy="120" r="100" class="ring-track" />
+              <circle cx="120" cy="120" r="100" class="ring-progress" />
+            </svg>
+            <span class="timer-caption" id="ringLabel">00:00</span>
+          </div>
+        </div>
+        <div class="status-meta">
+          <div>
+            <p class="meta-label">动作</p>
+            <p id="exerciseName">-</p>
+          </div>
+          <div>
+            <p class="meta-label">组数</p>
+            <p id="setCount">-</p>
+          </div>
+          <div>
+            <p class="meta-label">重量(kg)</p>
+            <p id="weightValue">-</p>
+          </div>
+        </div>
+        <div class="controls">
+          <button id="actionButton" class="primary" disabled>开始休息</button>
+          <button id="pauseButton" class="ghost" disabled>暂停</button>
+          <button id="skipButton" class="ghost" disabled>跳过休息</button>
+        </div>
+        <p id="nextHint" class="next-hint">准备开始训练。</p>
+      </div>
+    </section>
+  </main>
+
+  <template id="exerciseTemplate">
+    <article class="exercise-card">
+      <div class="exercise-row">
+        <label>
+          动作名称
+          <input type="text" class="exercise-name" placeholder="例如：二头弯举" />
+        </label>
+        <label>
+          组数
+          <input type="number" class="exercise-sets" min="1" value="3" />
+        </label>
+        <label>
+          组间休息(秒)
+          <input type="number" class="exercise-rest-set" min="0" value="60" />
+        </label>
+        <label>
+          动作间休息(秒)
+          <input type="number" class="exercise-rest-exercise" min="0" value="90" />
+        </label>
+        <label>
+          重量(kg)
+          <input type="number" class="exercise-weight" min="0" step="0.5" placeholder="可空" />
+        </label>
+      </div>
+      <div class="exercise-actions">
+        <button class="ghost remove-exercise">移除</button>
+      </div>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>

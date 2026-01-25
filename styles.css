@@ -1,0 +1,282 @@
+:root {
+  color-scheme: light;
+  font-family: "Inter", "Noto Sans SC", system-ui, sans-serif;
+  background: #f5f6fb;
+  color: #1c1f2a;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 32px 40px 16px;
+}
+
+.app-header h1 {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.app-header p {
+  color: #5b6275;
+}
+
+.session-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 1fr) minmax(360px, 480px);
+  gap: 24px;
+  padding: 16px 40px 40px;
+}
+
+.config-panel,
+.timer-panel {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.exercise-list {
+  display: grid;
+  gap: 16px;
+}
+
+.exercise-card {
+  border: 1px solid #e3e6f1;
+  border-radius: 16px;
+  padding: 16px;
+  background: #fbfbfe;
+}
+
+.exercise-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  color: #4d5366;
+}
+
+input {
+  border: 1px solid #d8dbe8;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 14px;
+  background: #fff;
+}
+
+.exercise-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+button {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+button.primary {
+  background: #4b6bff;
+  color: #fff;
+  box-shadow: 0 10px 20px rgba(75, 107, 255, 0.25);
+}
+
+button.ghost {
+  background: #eef1ff;
+  color: #2f3a72;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.status-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.status-label {
+  font-size: 13px;
+  color: #7a8196;
+}
+
+.style-toggle {
+  display: flex;
+  gap: 8px;
+  background: #f1f3ff;
+  padding: 6px;
+  border-radius: 999px;
+}
+
+.style-btn {
+  background: transparent;
+  color: #5c6284;
+  padding: 6px 14px;
+  border-radius: 999px;
+}
+
+.style-btn.active {
+  background: #ffffff;
+  color: #1b2a6d;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+}
+
+.timer-display {
+  position: relative;
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timer-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.timer-face.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.numeric span {
+  font-size: 64px;
+  font-weight: 700;
+}
+
+.pointer svg,
+.ring svg {
+  width: 240px;
+  height: 240px;
+}
+
+.pointer .dial {
+  fill: none;
+  stroke: #dfe3f5;
+  stroke-width: 8;
+}
+
+.pointer .hand {
+  stroke: #4b6bff;
+  stroke-linecap: round;
+  stroke-width: 8;
+  transform-origin: 120px 120px;
+  transition: transform 0.2s ease;
+}
+
+.pointer .center {
+  fill: #1c1f2a;
+}
+
+.timer-caption {
+  position: absolute;
+  font-size: 32px;
+  font-weight: 600;
+  color: #1c1f2a;
+}
+
+.ring .ring-track {
+  fill: none;
+  stroke: #e4e7f6;
+  stroke-width: 12;
+}
+
+.ring .ring-progress {
+  fill: none;
+  stroke: #4b6bff;
+  stroke-width: 12;
+  stroke-linecap: round;
+  stroke-dasharray: 628;
+  stroke-dashoffset: 628;
+  transform: rotate(-90deg);
+  transform-origin: 120px 120px;
+  transition: stroke-dashoffset 0.2s ease;
+}
+
+.status-meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  background: #f7f8ff;
+  border-radius: 16px;
+  padding: 12px;
+}
+
+.meta-label {
+  font-size: 12px;
+  color: #7a8196;
+  margin-bottom: 6px;
+}
+
+.controls {
+  display: flex;
+  gap: 12px;
+}
+
+.next-hint {
+  color: #5c6284;
+  font-size: 14px;
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
