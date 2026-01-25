@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>每日食谱营养记录</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body>
+    <main class="container">
+      <header>
+        <h1>每日食谱营养记录</h1>
+        <p class="subtitle">记录食谱、计算碳水/蛋白/脂肪与卡路里摄入</p>
+      </header>
+
+      <section class="card">
+        <h2>新增食谱</h2>
+        <form method="post" action="{{ url_for('add_recipe') }}" id="recipe-form">
+          <div class="form-grid">
+            <label>
+              日期
+              <input type="date" name="recipe_date" value="{{ recipe_date }}" required />
+            </label>
+            <label>
+              食谱名称
+              <input type="text" name="name" placeholder="例如：低脂鸡胸餐" required />
+            </label>
+            <label>
+              几人份
+              <input type="number" name="servings" min="1" value="1" required />
+            </label>
+          </div>
+
+          <div class="ingredients">
+            <div class="ingredients-header">
+              <h3>食材与重量</h3>
+              <button type="button" class="secondary" id="add-ingredient">添加一行</button>
+            </div>
+            <div id="ingredients-list"></div>
+          </div>
+
+          <div class="preview">
+            <h3>当前食谱营养预览（总量）</h3>
+            <div class="nutrition-grid" id="preview-totals">
+              <div>
+                <span>碳水</span>
+                <strong id="preview-carbs">0 g</strong>
+              </div>
+              <div>
+                <span>蛋白</span>
+                <strong id="preview-protein">0 g</strong>
+              </div>
+              <div>
+                <span>脂肪</span>
+                <strong id="preview-fat">0 g</strong>
+              </div>
+              <div>
+                <span>卡路里</span>
+                <strong id="preview-calories">0 kcal</strong>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="primary">保存食谱</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>当日总营养摄入</h2>
+        <div class="nutrition-grid">
+          <div>
+            <span>碳水</span>
+            <strong>{{ day_totals.carbs }} g</strong>
+          </div>
+          <div>
+            <span>蛋白</span>
+            <strong>{{ day_totals.protein }} g</strong>
+          </div>
+          <div>
+            <span>脂肪</span>
+            <strong>{{ day_totals.fat }} g</strong>
+          </div>
+          <div>
+            <span>卡路里</span>
+            <strong>{{ day_totals.calories }} kcal</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>当日食谱</h2>
+        {% if recipes %}
+          <div class="recipe-list">
+            {% for recipe in recipes %}
+              <article class="recipe">
+                <header>
+                  <div>
+                    <h3>{{ recipe.name }}</h3>
+                    <p>{{ recipe.servings }} 人份</p>
+                  </div>
+                  <div class="recipe-totals">
+                    <span>总碳水 {{ recipe.totals.carbs }} g</span>
+                    <span>总蛋白 {{ recipe.totals.protein }} g</span>
+                    <span>总脂肪 {{ recipe.totals.fat }} g</span>
+                    <span>总卡路里 {{ recipe.totals.calories }} kcal</span>
+                  </div>
+                </header>
+                <div class="recipe-body">
+                  <div>
+                    <h4>食材明细</h4>
+                    <ul>
+                      {% for item in recipe.items %}
+                        <li>
+                          {{ item.name }} - {{ item.weight_g }} g
+                          <span class="muted">(碳水 {{ item.carbs }} g / 蛋白 {{ item.protein }} g / 脂肪 {{ item.fat }} g)</span>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4>单人份摄入</h4>
+                    <div class="nutrition-grid small">
+                      <div>
+                        <span>碳水</span>
+                        <strong>{{ recipe.per_person.carbs }} g</strong>
+                      </div>
+                      <div>
+                        <span>蛋白</span>
+                        <strong>{{ recipe.per_person.protein }} g</strong>
+                      </div>
+                      <div>
+                        <span>脂肪</span>
+                        <strong>{{ recipe.per_person.fat }} g</strong>
+                      </div>
+                      <div>
+                        <span>卡路里</span>
+                        <strong>{{ recipe.per_person.calories }} kcal</strong>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="empty">今天还没有记录食谱。</p>
+        {% endif %}
+      </section>
+    </main>
+
+    <template id="ingredient-template">
+      <div class="ingredient-row">
+        <label>
+          食材
+          <select name="ingredient_id" required>
+            {% for ingredient in ingredients %}
+              <option
+                value="{{ ingredient.id }}"
+                data-carbs="{{ ingredient.carbs }}"
+                data-protein="{{ ingredient.protein }}"
+                data-fat="{{ ingredient.fat }}"
+                data-calories="{{ ingredient.calories }}"
+              >
+                {{ ingredient.name }} (每100g: C{{ ingredient.carbs }} / P{{ ingredient.protein }} / F{{ ingredient.fat }})
+              </option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>
+          重量(g)
+          <input type="number" name="weight_g" min="1" value="100" required />
+        </label>
+        <div class="row-macros">
+          <span>碳水 <strong data-field="carbs">0</strong> g</span>
+          <span>蛋白 <strong data-field="protein">0</strong> g</span>
+          <span>脂肪 <strong data-field="fat">0</strong> g</span>
+          <span>卡路里 <strong data-field="calories">0</strong> kcal</span>
+        </div>
+        <button type="button" class="ghost remove-row">移除</button>
+      </div>
+    </template>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>
