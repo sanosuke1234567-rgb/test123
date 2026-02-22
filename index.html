@@ -3,148 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>山东保皇 - Web 入口</title>
+  <title>山东保皇 - 纯 GitHub Pages 版</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 980px; margin: 24px auto; padding: 0 16px; }
-    .card { border: 1px solid #ddd; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
-    .ok { color: #0a7d1c; }
-    .warn { color: #b56200; }
-    .err { color: #b50000; }
-    pre { background: #111; color: #0f0; padding: 12px; border-radius: 8px; max-height: 260px; overflow: auto; }
-    code { background: #f3f3f3; padding: 2px 6px; border-radius: 4px; }
-    button { margin-right: 8px; }
-    input { width: 220px; }
+    body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto; padding: 0 12px; }
+    .card { border: 1px solid #ddd; border-radius: 8px; padding: 12px; margin-bottom: 12px; }
+    .row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .col { flex: 1 1 360px; }
+    .muted { color: #666; }
+    .warn { color: #b25d00; }
+    .ok { color: #087a20; }
+    .err { color: #b30000; }
+    #hand button { margin: 4px; }
+    #hand button.selected { background: #2d6cdf; color: #fff; }
+    pre { background: #111; color: #0f0; padding: 10px; max-height: 280px; overflow: auto; border-radius: 6px; }
   </style>
 </head>
 <body>
-  <h1>山东保皇（BaoHuang）Web 入口</h1>
+  <h1>山东保皇（纯 GitHub Pages 可运行）</h1>
+  <p class="muted">本版本不依赖 Python 后端，规则引擎/AI 全部在浏览器运行。</p>
 
-  <div class="card">
-    <p>这个页面是 <b>GitHub Pages 静态入口</b>：它本身可以正常打开。</p>
-    <p id="backend-status" class="warn">正在检测后端 API (<code>/api/state</code>) ...</p>
-    <p>如果你是 GitHub Pages 直接访问（无 Python 进程），页面会展示说明信息；如果后端在线，则可在本页直接交互。</p>
+  <div class="card row">
+    <div class="col">
+      <p id="meta"></p>
+      <p id="table"></p>
+      <p id="counts"></p>
+      <p id="finish"></p>
+      <p id="result" class="ok"></p>
+      <p id="msg" class="warn"></p>
+      <button id="new-game">新开一局</button>
+      <button id="hint">提示</button>
+      <button id="play">出牌</button>
+      <button id="pass">过牌</button>
+      <button id="clear">清空选择</button>
+    </div>
+    <div class="col">
+      <p><b>身份说明</b>：P0=你，其余4位AI。默认暗保（结算公开）。</p>
+      <p>支持牌型：single / pair / triple / set(>=4同点)。</p>
+      <p>默认规则：同型同张数压牌、3最后出、连续4家过牌清台。</p>
+    </div>
   </div>
 
-  <div id="game-panel" class="card" style="display:none;">
-    <h3>游戏面板（后端在线）</h3>
-    <p id="meta"></p>
-    <p id="table"></p>
-    <p id="counts"></p>
-    <p><b>你的手牌：</b></p>
+  <div class="card">
+    <p><b>你的手牌（点击选择）</b></p>
     <div id="hand"></div>
-    <p style="margin-top:10px;">
-      <input id="indexes" placeholder="例如: 0 1 2 或 0,1" />
-      <button id="play-btn">出牌</button>
-      <button id="pass-btn">过牌</button>
-      <button id="new-btn">新局</button>
-      <button id="refresh-btn">刷新</button>
-    </p>
-    <p id="action-msg"></p>
+  </div>
+
+  <div class="card">
+    <h3>最近日志</h3>
     <pre id="logs"></pre>
   </div>
 
-  <div id="offline-panel" class="card" style="display:none;">
-    <h3>仅静态托管模式（GitHub Pages）</h3>
-    <p class="warn">检测不到后端，无法直接在 Pages 上运行 Python 规则引擎与 AI。</p>
-    <p>要真正可玩，请在可运行 Python 的环境启动服务：</p>
-    <pre>python web_app.py
-# 然后打开 http://127.0.0.1:8000</pre>
-    <p>如果你想“纯 Pages 可玩”，下一步可改造为：
-      <b>前端 JS 规则引擎</b> 或 <b>Serverless API（Cloudflare Workers / Vercel Functions）</b>。</p>
-  </div>
-
-<script>
-const statusEl = document.getElementById('backend-status');
-const gamePanel = document.getElementById('game-panel');
-const offlinePanel = document.getElementById('offline-panel');
-const metaEl = document.getElementById('meta');
-const tableEl = document.getElementById('table');
-const countsEl = document.getElementById('counts');
-const handEl = document.getElementById('hand');
-const logsEl = document.getElementById('logs');
-const actionMsg = document.getElementById('action-msg');
-
-async function fetchState() {
-  const res = await fetch('./api/state', { cache: 'no-store' });
-  if (!res.ok) throw new Error('api unavailable');
-  return res.json();
-}
-
-function render(vm) {
-  metaEl.textContent = `皇帝: P${vm.emperor} | 侍卫: ${vm.guard} | 当前轮到: P${vm.turn}`;
-  tableEl.textContent = `桌面待压牌: ${vm.last_play} | 当前领出: ${vm.leader}`;
-  countsEl.textContent = `你的手牌: ${vm.my_hand_count} 张 | AI 手牌数: ${JSON.stringify(vm.ai_hand_counts)} | 完成名次: ${JSON.stringify(vm.finish_order)}`;
-  handEl.textContent = vm.my_hand.join('  ');
-  logsEl.textContent = (vm.logs || []).join('\n');
-  if (vm.result) {
-    actionMsg.textContent = `对局结束：${vm.result.winner}，${vm.result.explanation}`;
-  }
-}
-
-async function postForm(path, data) {
-  const body = new URLSearchParams(data);
-  await fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
-}
-
-document.getElementById('play-btn').onclick = async () => {
-  try {
-    await postForm('./action', { action: 'play', indexes: document.getElementById('indexes').value || '' });
-    const vm = await fetchState();
-    actionMsg.textContent = '已提交出牌';
-    render(vm);
-  } catch (e) {
-    actionMsg.textContent = '出牌失败：后端不可用或参数非法';
-    actionMsg.className = 'err';
-  }
-};
-
-document.getElementById('pass-btn').onclick = async () => {
-  try {
-    await postForm('./action', { action: 'pass', indexes: '' });
-    const vm = await fetchState();
-    actionMsg.textContent = '已提交过牌';
-    render(vm);
-  } catch (e) {
-    actionMsg.textContent = '过牌失败：后端不可用';
-    actionMsg.className = 'err';
-  }
-};
-
-document.getElementById('new-btn').onclick = async () => {
-  try {
-    await postForm('./new', {});
-    const vm = await fetchState();
-    actionMsg.textContent = '已新开一局';
-    render(vm);
-  } catch (e) {
-    actionMsg.textContent = '新局失败：后端不可用';
-    actionMsg.className = 'err';
-  }
-};
-
-document.getElementById('refresh-btn').onclick = async () => {
-  try {
-    const vm = await fetchState();
-    render(vm);
-  } catch (e) {
-    actionMsg.textContent = '刷新失败：后端不可用';
-    actionMsg.className = 'err';
-  }
-};
-
-(async function init() {
-  try {
-    const vm = await fetchState();
-    statusEl.textContent = '后端 API 在线，可在本页游玩。';
-    statusEl.className = 'ok';
-    gamePanel.style.display = 'block';
-    render(vm);
-  } catch {
-    statusEl.textContent = '后端 API 不可用：当前为纯静态页面模式。';
-    statusEl.className = 'warn';
-    offlinePanel.style.display = 'block';
-  }
-})();
-</script>
+  <script src="./app.js"></script>
 </body>
 </html>
