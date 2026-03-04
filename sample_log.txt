@@ -1,0 +1,41 @@
+名次: [3, 4, 0, 1, 2]
+P3 play set:4x5 lead heuristic
+P4 play set:6x5 response score=5.26
+P0 pass
+P1 pass
+P2 play set:7x5 response score=2.58
+P3 pass
+P4 pass
+P0 pass
+P1 pass
+清台，P2重新领出
+P3 play set:5x5 lead heuristic
+P4 play set:Ax5 response score=3.18
+P0 pass
+P1 pass
+P2 pass
+P3 pass
+清台，P4重新领出
+P0 play set:5x6 lead heuristic
+P1 pass
+P2 pass
+P3 pass
+P4 pass
+清台，P0重新领出
+P1 play set:7x7 lead heuristic
+P2 pass
+P3 play set:2x7 response score=2.46
+P4 pass
+P0 pass
+P1 pass
+P2 pass
+清台，P3重新领出
+P4 play single:4x1 lead heuristic
+P0 play single:6x1 response score=2.76
+P1 play single:8x1 response score=2.14
+P2 pass
+P3 play single:Jx1 response score=5.95
+P4 play single:Kx1 response score=5.44
+P0 pass
+P1 pass
+P2 pass

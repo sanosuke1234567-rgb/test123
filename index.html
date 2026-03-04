@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>山东保皇 - 纯 GitHub Pages 版</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 1100px; margin: 20px auto; padding: 0 12px; }
+    .card { border: 1px solid #ddd; border-radius: 8px; padding: 12px; margin-bottom: 12px; }
+    .row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .col { flex: 1 1 360px; }
+    .muted { color: #666; }
+    .warn { color: #b25d00; }
+    .ok { color: #087a20; }
+    .err { color: #b30000; }
+    #hand button { margin: 4px; }
+    #hand button.selected { background: #2d6cdf; color: #fff; }
+    pre { background: #111; color: #0f0; padding: 10px; max-height: 280px; overflow: auto; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h1>山东保皇（纯 GitHub Pages 可运行）</h1>
+  <p class="muted">本版本不依赖 Python 后端，规则引擎/AI 全部在浏览器运行。</p>
+
+  <div class="card row">
+    <div class="col">
+      <p id="meta"></p>
+      <p id="table"></p>
+      <p id="counts"></p>
+      <p id="finish"></p>
+      <p id="result" class="ok"></p>
+      <p id="msg" class="warn"></p>
+      <button id="new-game">新开一局</button>
+      <button id="hint">提示</button>
+      <button id="play">出牌</button>
+      <button id="pass">过牌</button>
+      <button id="clear">清空选择</button>
+    </div>
+    <div class="col">
+      <p><b>身份说明</b>：P0=你，其余4位AI。默认暗保（结算公开）。</p>
+      <p>支持牌型：single / pair / triple / set(>=4同点)。</p>
+      <p>默认规则：同型同张数压牌、3最后出、连续4家过牌清台。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <p><b>你的手牌（点击选择）</b></p>
+    <div id="hand"></div>
+  </div>
+
+  <div class="card">
+    <h3>最近日志</h3>
+    <pre id="logs"></pre>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
